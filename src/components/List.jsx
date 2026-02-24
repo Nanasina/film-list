@@ -1,7 +1,34 @@
-import { Plus, Clapperboard } from "lucide-react";
+import { Plus, Clapperboard, Trash2, Eye } from "lucide-react";
+import { useState } from "react";
 // import { motion, Typewriter } from "motion/react"
 
 function List() {
+
+  const [titre, setTitre] = useState("")
+  const [filmSerie, setFilmSerie] = useState("")
+  const [categorie, setCategorie] = useState("")
+  const [nbrvue, setNbrvue] = useState(0)
+  const [film, setFilm] = useState([])
+
+  function ajouter() {
+    if(titre === "" || filmSerie === "" || categorie === ""){
+      console.log("Veuilllez remplir tous les champs")
+      return;
+    }
+
+    const nouveauFilm = {
+      titre,
+      filmSerie,
+      categorie,
+    }
+
+    setFilm([...film, nouveauFilm]);
+    
+    setTitre("");
+    setFilmSerie("");
+    setCategorie("")
+  }
+
 
   return (
     <>
@@ -51,10 +78,19 @@ function List() {
       </tr>
     </thead>
     <tbody>
-      {/* row 1 */}
-      <tr>
-        <td>hsgsfs</td>
+      {film.map((f, index) => (
+        <tr key={index}>
+        <th>{f.titre}</th>
+        <th>{f.filmSerie}</th>
+        <th>{f.categorie}</th>
+        <th></th>
+        <th>{nbrvue}</th>
+        <th className="flex gap-1">
+          <button type="button" className="btn btn-soft btn-info"><Eye className="w-4 h-4"/></button>
+          <button type="button" className="btn btn-soft btn-error"><Trash2 className="w-4 h-4" /></button>
+        </th>
       </tr>
+      ))}
     </tbody>
   </table>
 </div>
@@ -71,27 +107,37 @@ function List() {
    <div className="m-8">
     <fieldset className="fieldset">
       <legend className="fieldset-legend">Titre</legend>
-      <input type="text" className="input w-95" placeholder="Titre du film" />
+      <input type="text"
+         className="input w-95"
+         placeholder="Titre du film"
+         value={titre}
+         onChange={(e) => setTitre(e.target.value)}
+         />
   </fieldset>
 
    <fieldset className="fieldset">
       <legend className="fieldset-legend">Film ou série</legend>
-      <select defaultValue="Film ou série" className="select w-95">
-        <option disabled={true} >Film ou série</option>
-        <option>Film</option>
-        <option>Série</option>
-        
-     </select>
+      <input type="text"
+      className="input w-95"
+      placeholder="Film ou série"
+      value={filmSerie}
+      onChange={(e) => setFilmSerie(e.target.value)}
+      />
   </fieldset>
 
    <fieldset className="fieldset">
       <legend className="fieldset-legend">Catégorie</legend>
-      <input type="text" className="input w-95" placeholder="exemple: K-drama" />
+      <input type="text"
+      className="input w-95"
+      placeholder="exemple: K-drama"
+       value={categorie}
+      onChange={(e) => setCategorie(e.target.value)}
+      />
   </fieldset>
    </div>
 
    <div className="flex justify-center items-center">
-    <button className="btn btn-soft btn-secondary btn-wide ">AJOUTER</button>
+    <button className="btn btn-soft btn-secondary btn-wide" onClick={ajouter} >AJOUTER</button>
    </div>
     
   </div>
