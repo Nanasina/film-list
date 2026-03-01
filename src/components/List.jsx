@@ -20,6 +20,7 @@ function List() {
       titre,
       filmSerie,
       categorie,
+      nbrvue : 0,
     }
 
     setFilm([...film, nouveauFilm]);
@@ -29,6 +30,23 @@ function List() {
     setCategorie("")
   }
 
+function vu(index) {
+  const nouveauFilm = film.map((f,i) => {
+    if(i === index){
+      return{...f, nbrvue: f.nbrvue + 1}
+    }
+    else
+      return f
+  });
+
+  setFilm(nouveauFilm);
+} 
+
+function suppFilm(index){
+  const nouveauFilm = film.filter((f,i) => i !== index);
+
+  setFilm(nouveauFilm);
+}
 
   return (
     <>
@@ -84,10 +102,10 @@ function List() {
         <th>{f.filmSerie}</th>
         <th>{f.categorie}</th>
         <th></th>
-        <th>{nbrvue}</th>
+        <th>{f.nbrvue}</th>
         <th className="flex gap-1">
-          <button type="button" className="btn btn-soft btn-info"><Eye className="w-4 h-4"/></button>
-          <button type="button" className="btn btn-soft btn-error"><Trash2 className="w-4 h-4" /></button>
+          <button type="button" className="btn btn-soft btn-info" onClick={() => vu(index)}><Eye className="w-4 h-4"/></button>
+          <button type="button" className="btn btn-soft btn-error" onClick={() => suppFilm(index)}><Trash2 className="w-4 h-4" /></button>
         </th>
       </tr>
       ))}
