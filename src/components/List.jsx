@@ -9,6 +9,7 @@ function List() {
   const [categorie, setCategorie] = useState("")
   const [nbrvue, setNbrvue] = useState(0)
   const [film, setFilm] = useState([])
+  const [recherche, setRecherche] = useState("")
 
   function ajouter() {
     if(titre === "" || filmSerie === "" || categorie === ""){
@@ -48,6 +49,8 @@ function suppFilm(index){
   setFilm(nouveauFilm);
 }
 
+  const rechercheFilm = film.filter(f => f.titre.toLowerCase().includes(recherche));
+
   return (
     <>
       <div className="flex gap-8 m-8">
@@ -66,7 +69,11 @@ function suppFilm(index){
                   <path d="m21 21-4.3-4.3"></path>
              </g>
          </svg>
-           <input type="search" placeholder="Recherche" />
+           <input type="search"
+           placeholder="Recherche"
+           value={recherche}
+           onChange={(e) => setRecherche(e.target.value)}
+           />
      </label>
         </div>
         
@@ -96,7 +103,7 @@ function suppFilm(index){
       </tr>
     </thead>
     <tbody>
-      {film.map((f, index) => (
+      {rechercheFilm.map((f, index) => (
         <tr key={index}>
         <th>{f.titre}</th>
         <th>{f.filmSerie}</th>
