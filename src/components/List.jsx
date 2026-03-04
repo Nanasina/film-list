@@ -1,3 +1,4 @@
+import { Modal } from "bootstrap";
 import { Plus, Clapperboard, Trash2, Eye } from "lucide-react";
 import { useState } from "react";
 // import { motion, Typewriter } from "motion/react"
@@ -10,6 +11,7 @@ function List() {
   const [nbrvue, setNbrvue] = useState(0)
   const [film, setFilm] = useState([])
   const [recherche, setRecherche] = useState("")
+  const [filtre, setFiltre] = useState("tous")
 
   function ajouter() {
     if(titre === "" || filmSerie === "" || categorie === ""){
@@ -21,10 +23,12 @@ function List() {
       titre,
       filmSerie,
       categorie,
+      status:"A regarder",
       nbrvue : 0,
     }
 
     setFilm([...film, nouveauFilm]);
+    document.getElementById('my_modal_3').close();
     
     setTitre("");
     setFilmSerie("");
@@ -34,7 +38,7 @@ function List() {
 function vu(index) {
   const nouveauFilm = film.map((f,i) => {
     if(i === index){
-      return{...f, nbrvue: f.nbrvue + 1}
+      return{...f, nbrvue: f.nbrvue + 1, status: "Vu"}
     }
     else
       return f
@@ -49,7 +53,17 @@ function suppFilm(index){
   setFilm(nouveauFilm);
 }
 
-  const rechercheFilm = film.filter(f => f.titre.toLowerCase().includes(recherche));
+  const filtreFilm = film
+  .filter(f => f.titre.toLowerCase().includes(recherche))
+  .filter(f => {    
+    if (filtre === "tous")
+      return true;
+    return f.status === filtre;
+  })
+
+  // const fitltreVoir = film.filter(f => f.status === "A regarder");
+
+  // const filtreVu = film.filter(f => f.status === "Vu")
 
   return (
     <>
@@ -77,9 +91,9 @@ function suppFilm(index){
      </label>
         </div>
         
-     <button className="btn btn-soft">Tous</button>
-     <button className="btn btn-soft">A regarder</button>
-     <button className="btn btn-soft">Vu</button>
+     <button className="btn btn-soft" onClick={() => setFiltre("tous")}>Tous</button>
+     <button className="btn btn-soft" onClick={() => setFiltre("A regarder")}>A regarder</button>
+     <button className="btn btn-soft" onClick={() => setFiltre("Vu")}>Vu</button>
 
      <div className="ml-15">
         <button className="btn btn-soft btn-secondary " onClick={()=>document.getElementById('my_modal_3').showModal()}> <Plus />Ajouter un film/série</button>
@@ -103,12 +117,12 @@ function suppFilm(index){
       </tr>
     </thead>
     <tbody>
-      {rechercheFilm.map((f, index) => (
+      {filtreFilm.map((f, index) => (
         <tr key={index}>
         <th>{f.titre}</th>
         <th>{f.filmSerie}</th>
         <th>{f.categorie}</th>
-        <th></th>
+        <th>{f.status}</th>
         <th>{f.nbrvue}</th>
         <th className="flex gap-1">
           <button type="button" className="btn btn-soft btn-info" onClick={() => vu(index)}><Eye className="w-4 h-4"/></button>
